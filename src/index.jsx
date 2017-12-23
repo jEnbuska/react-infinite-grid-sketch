@@ -15,20 +15,20 @@ const {headers, rows} = createMockData();
 const ROW_HEIGHT = 20;
 class Root extends React.Component {
     state = {
-        underChange: false,
+        underCustomization: false,
         layout: ['a', 'b', 'c'].map((i) => ({i, x: 5, y: 5, w: 5, h: 4, minW: 5, minH: 4})),
         headers,
         rows
     };
     toggle = false;
-    delays = 0;
 
     render() {
         console.log('render root');
-        const {headers, rows, layout, underChange} = this.state;
+        const {headers, rows, layout, underCustomization} = this.state;
+        console.log({layout: layout.map(it => it.i)});
         return (
             <MuiThemeProvider>
-                <div className={underChange ? 'blur-filter' : ''} >
+                <div>
                     <Toggle
                         label='Toggle'
                         onToggle={this.onToggle}
@@ -36,9 +36,8 @@ class Root extends React.Component {
                         style={{maxWidth: 70}}
                         defaultToggled={false} />
                     <GridLayout
-                        className='layout'
                         layout={layout}
-                        isResizable={underChange}
+                        className={underCustomization ? 'hide-resize' : ''}
                         cols={12}
                         rows={12}
                         rowHeight={ROW_HEIGHT}
@@ -55,7 +54,7 @@ class Root extends React.Component {
                                 id={i}
                                 headers={headers}
                                 rows={rows}
-                                displaySimple={underChange}
+                                preventInteraction={underCustomization}
                                 width={w*30}
                                 handleColumnResize={this.handleColumnResize}
                                 height={h*30} />
@@ -68,8 +67,8 @@ class Root extends React.Component {
 
     onToggle = () => {
         this.toggle = !this.toggle;
-        setTimeout(() => this.setState({underChange: this.toggle}), 245);
-    }
+        setTimeout(() => this.setState({underCustomization: this.toggle}), 245);
+    };
 
     handleResize = (layout) => {
         this.setState(() => ({layout}));

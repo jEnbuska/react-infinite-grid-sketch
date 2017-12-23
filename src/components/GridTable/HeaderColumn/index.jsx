@@ -21,9 +21,9 @@ export default class HeaderColumn extends React.PureComponent {
                 {title}
                 <span onMouseDown={e => e.stopPropagation()}>
                     <Draggable
-                         axis='x'
-                         position={{x: width - this.initialWidth}}
-                         onDrag={this.handleResize}>
+                        axis='x'
+                        position={{x: width - this.initialWidth}}
+                        onDrag={this.handleResize}>
                         <span className='column-handle'style={{transform: 'translate(0px, 0px)'}} />
                     </Draggable>
                 </span>
@@ -31,8 +31,6 @@ export default class HeaderColumn extends React.PureComponent {
     }
 
     handleResize = e => {
-        console.log(e);
-        console.log('TODO handle resize');
         const {width, onResize} = this.props;
         onResize(width + e.movementX);
     }

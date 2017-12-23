@@ -4,6 +4,12 @@
     margin-right: 13px;
 }
 
+.hide-resize{
+    .react-resizable-handle{
+        display: none;
+    }
+}
+
 .react-grid-item {
     margin: 0;
 }

@@ -14,15 +14,6 @@
             animation: appear 0.4s ease;
         }
     }
-
-    .grid-table-row-dummy {
-        z-index: 9 !important;
-        position: relative;
-        display: inline-block;
-        width: 1000%;
-        height: 30px;
-        border-bottom: 1px solid black;
-    }
     .grid-table-row-placeholder {
         display: block;
         height: 30px;

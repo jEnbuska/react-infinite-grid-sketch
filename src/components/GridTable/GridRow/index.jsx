@@ -10,12 +10,16 @@ export default class GridRow extends React.PureComponent {
         columns: array,
         rowFocus: bool,
         inputFocus: number,
+        displayPlaceholder: bool
     };
 
     state = {focus: {}};
 
     render() {
-        const {headers, columns, inputFocus, rowFocus} = this.props;
+        const {headers, columns, inputFocus, rowFocus, displayPlaceholder} = this.props;
+        if (displayPlaceholder) {
+            return <div className='grid-table-row-dummy' />;
+        }
         return (
             <div
                 onKeyDown={this.onKeyDown}
@@ -44,5 +48,4 @@ export default class GridRow extends React.PureComponent {
             }
         }
     }
-
 }
