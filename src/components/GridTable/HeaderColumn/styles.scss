@@ -1,0 +1,24 @@
+.grid-header-column {
+    display: inline-block;
+    height: 30px;
+    position: relative;
+    padding: 0;
+    margin: 0 1px 0 0;
+    cursor: pointer;
+    user-select: none;
+    .column-handle {
+        content: '';
+        right: -1px;
+        width: 2px;
+        position: absolute;
+        background: black;
+        height: 100%;
+        cursor: col-resize;
+        z-index: 11;
+        &:hover {
+            right: -7px;
+            width: 14px;
+            background: transparent;
+        }
+    }
+}

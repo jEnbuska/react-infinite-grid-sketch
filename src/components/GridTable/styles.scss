@@ -1,0 +1,64 @@
+.grid-table-container {
+    position: relative !important;
+    overflow: hidden !important;
+    background-color: #fafafa;
+    .grid-table-content {
+        overflow: scroll;
+        .grid-table-header {
+            position: relative;
+            visibility: visible !important;
+            z-index: 10 !important;
+            background: grey;
+            white-space: nowrap;
+            display: inline-block;
+            animation: appear 0.4s ease;
+        }
+    }
+    .grid-table-row {
+        z-index: 9 !important;
+        position: relative;
+        white-space: nowrap;
+        display: inline-block;
+        height: 30px;
+        border-bottom: 1px solid black;
+    }
+    .grid-table-row-dummy {
+        z-index: 9 !important;
+        position: relative;
+        display: inline-block;
+        width: 1000%;
+        height: 30px;
+        border-bottom: 1px solid black;
+    }
+    .grid-table-row-placeholder {
+        display: block;
+        height: 30px;
+    }
+    .grid-column-placeholder {
+        width: 100px;
+        padding: 0;
+        margin: 0;
+    }
+    .grid-table-column {
+        width: 100px;
+        display: inline-block;
+        height: 30px;
+        border: 0;
+        border-left: 1px solid black;
+        position: relative;
+        padding: 0;
+        margin: 0;
+    }
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0
+    }
+    40% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
