@@ -3,7 +3,7 @@ import Draggable from 'react-draggable';
 import {func, string, number} from 'prop-types';
 import './styles.scss';
 
-export default class HeaderColumn extends React.Component {
+export default class HeaderColumn extends React.PureComponent {
     static propTypes = {
         onResize: func,
         width: number,
@@ -13,7 +13,7 @@ export default class HeaderColumn extends React.Component {
     componentWillMount() {
         this.initialWidth = this.props.width;
     }
-    
+
     render() {
         const {state, props: {width, title}} = this;
         return (
