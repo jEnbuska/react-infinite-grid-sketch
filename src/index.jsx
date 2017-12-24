@@ -37,7 +37,7 @@ class Root extends React.Component {
                         defaultToggled={false} />
                     <GridLayout
                         layout={layout}
-                        className={underCustomization ? 'hide-resize' : ''}
+                        className={underCustomization ? '': 'hide-resize'}
                         cols={12}
                         rows={12}
                         rowHeight={ROW_HEIGHT}
