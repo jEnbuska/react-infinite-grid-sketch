@@ -23,7 +23,7 @@ export default class GridTable extends React.Component {
     };
 
     render() {
-        const {list: {scrollTop}, props, state, setListRef, setHeaderRef} = this;
+        const {list: {scrollTop}, props, state, setListRef} = this;
         const views = [];
         const {rows, headers, children, handleColumnResize, preventInteraction, ...meta} = props;
 
