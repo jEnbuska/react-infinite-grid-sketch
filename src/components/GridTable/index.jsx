@@ -2,18 +2,18 @@ import React from 'react';
 import {string, number, array, object, bool, func} from 'prop-types';
 import HeaderColumn from './HeaderColumn';
 import GridRow from './GridRow';
+import {hasDiffs} from '../../utils';
 import './styles.scss';
 
 const SCROLL_BAR_HEIGHT = 10;
 const ROW_HEIGHT = 30;
-const {min, max, abs} = Math;
+const {min, max, trunc} = Math;
 const {entries} = Object;
 
 export default class GridTableContainer extends React.Component {
     static propTypes = {
-        id: string,
         headers: array,
-        columns: array,
+        rows: array,
         preventInteraction: bool,
         handleColumnResize: func,
     };
@@ -21,16 +21,15 @@ export default class GridTableContainer extends React.Component {
     state = {
         focus: [0, 0],
         fromY: 0,
-        toY: 30,
-        y: 0, /*fromX: 0, toX: 30,*/
+        toY: 30
     };
 
     render() {
-        const {grid, props, state, setGridRef, setHeaderRef} = this;
-        console.log(state);
+        const {grid: {scrollTop}, props, state, setGridRef, setHeaderRef} = this;
         const views = [];
-        const {height, rows, headers, children, handleColumnResize, preventInteraction, ...meta} = props;
-        const {fromY, toY, y, focus} = state;
+        const {rows, headers, children, handleColumnResize, preventInteraction, ...meta} = props;
+
+        const {fromY, toY, focus} = state;
         if (fromY>0) {
             views.push(<div key='top-placeholder' style={{height: (fromY*ROW_HEIGHT) + 'px'}}/>);
         }
@@ -47,18 +46,19 @@ export default class GridTableContainer extends React.Component {
         if (toY<length) {
             views.push(<div key='bottom-placeholder' style={{height: ((length-toY)*ROW_HEIGHT) + 'px'}}/>);
         }
+        const contentHeight = parseInt(meta.style.height.replace('px', '')) - SCROLL_BAR_HEIGHT;
         return (
             <div {...meta}>
                 <div className='grid-table-container' onMouseDown={e => !preventInteraction && e.stopPropagation()}>
                     <div
                         ref={setGridRef}
                         className={'grid-table-content' + (preventInteraction ? ' no-scroll' : '')}
-                        style={{height: height - SCROLL_BAR_HEIGHT}}>
+                        style={{height: contentHeight + 'px'}}>
                         <div
-                            key={'header-' + y}
+                            key={'header-' + scrollTop}
                             ref={setHeaderRef}
                             className='grid-table-header'
-                            style={{top: (grid.scrollTop - 1) + 'px'}}>
+                            style={{top: (scrollTop - 1) + 'px'}}>
                             {headers.map(({title, width}, column) => (
                                 <HeaderColumn
                                     key={column}
@@ -83,43 +83,28 @@ export default class GridTableContainer extends React.Component {
     };
 
     componentDidMount() {
-        let y;
-        let prevHeight;
-        let prevWidth;
+        let prevScrollTop;
+        this.offsetHeight = this.grid.offsetHeight;
         this.grid.addEventListener('scroll', () => {
-            if (this.props.displaySimple) {
-                return;
-            }
-            const {scrollTop, scrollLeft, offsetWidth, offsetHeight} = this.grid;
-            if (scrollTop !== y || offsetHeight !== prevHeight || offsetWidth !== prevWidth) {
+            const {scrollTop, offsetHeight} = this.grid;
+            if (scrollTop !== prevScrollTop) {
                 this.setState(function () {
-                    const fromY = parseInt(scrollTop / ROW_HEIGHT) - 1;
-                    const toY = fromY + parseInt(offsetHeight / ROW_HEIGHT) + 2;
-                    return { fromY, toY, y: scrollTop};
+                    const fromY = trunc(scrollTop / ROW_HEIGHT) - 1;
+                    const toY = fromY + trunc(offsetHeight / ROW_HEIGHT) + 2;
+                    return { fromY, toY };
                 });
             }
-            y = scrollTop;
-            prevWidth = offsetWidth;
-            prevHeight = offsetHeight;
-            this.scrollLeft = scrollLeft;
+            prevScrollTop = scrollTop;
         });
     }
 
-    componentWillReceiveProps({height}) {
-        const {state: {y}, props} = this;
-        if (height > props.height) {
-            const toY = parseInt(y / ROW_HEIGHT) + parseInt(height / ROW_HEIGHT) + 1;
+    componentDidUpdate() {
+        const {offsetHeight, scrollTop} = this.grid;
+        if (offsetHeight!==this.offsetHeight) {
+            const toY = trunc((scrollTop / ROW_HEIGHT) + (offsetHeight / ROW_HEIGHT)) + 1;
+            // eslint-disable-next-line react/no-did-update-set-state
             this.setState({toY});
         }
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        return entries(this.state).some(([k, v]) => nextState[k] !== v) || entries(this.props).some(([k, v]) => nextProps[k] !== v);
-    }
-
-    componentDidUpdate(prevProps) {
-        if (prevProps.displaySimple && !this.props.displaySimple) {
-            this.grid.scrollTo(this.scrollLeft, this.state.y);
-        }
+        this.offsetHeight = offsetHeight;
     }
 }
