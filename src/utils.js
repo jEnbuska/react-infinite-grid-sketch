@@ -1,10 +1,10 @@
 export function createMockData() {
     const rows = [];
     const headers = [];
-    for (let i = 0; i < 20000; i++) {
+    for (let i = 0; i < 20; i++) {
         rows.push({id: i, columns: []});
     }
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 5; i++) {
         headers.push({title: i, width: 100});
         rows.forEach((e, j) => e.columns.push(i + '-' + j));
     }

@@ -47,7 +47,6 @@ class Root extends React.Component {
                         useCSSTransforms={false}
                         onDragStart={this.onDragStart}
                     >
-
                         {layout.map(({i, w, h}) => (
                             <GridTable
                                 key={i}

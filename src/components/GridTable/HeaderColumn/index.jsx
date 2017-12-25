@@ -15,7 +15,7 @@ export default class HeaderColumn extends React.PureComponent {
     }
 
     render() {
-        const {state, props: {width, title}} = this;
+        const {props: {width, title}} = this;
         return (
             <span className='grid-header-column' style={{width: (width) + 'px'}}>
                 {title}
@@ -24,7 +24,7 @@ export default class HeaderColumn extends React.PureComponent {
                         axis='x'
                         position={{x: width - this.initialWidth}}
                         onDrag={this.handleResize}>
-                        <span className='column-handle'style={{transform: 'translate(0px, 0px)'}} />
+                        <span className='column-handle' />
                     </Draggable>
                 </span>
             </span>);

@@ -3,7 +3,6 @@ import {number} from 'prop-types';
 
 const {min, max, trunc} = Math;
 
-
 //Does not work
 function createInfiniteList({items, rowHeight, Component}) {
     return class InfiniteList extends React.Component {
