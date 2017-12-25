@@ -6,7 +6,7 @@ export function createMockData() {
     }
     for (let i = 0; i < 40; i++) {
         headers.push({title: i, width: 100});
-        rows.forEach(e => e.columns.push(i));
+        rows.forEach((e, j) => e.columns.push(i + '-' + j));
     }
     return {rows, headers};
 }
