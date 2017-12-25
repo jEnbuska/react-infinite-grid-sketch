@@ -2,6 +2,7 @@ import React from 'react';
 import {string, number, array, object, bool, func} from 'prop-types';
 import HeaderColumn from './HeaderColumn';
 import GridRow from './GridRow';
+import Margin from './Margin';
 import './styles.scss';
 
 const SCROLL_BAR_HEIGHT = 10;
@@ -15,6 +16,7 @@ export default class GridTable extends React.Component {
         preventInteraction: bool,
         handleColumnResize: func,
     };
+
     list = {scrollTop: 0};
     state = {
         focus: [0, 0],
@@ -28,9 +30,6 @@ export default class GridTable extends React.Component {
         const {rows, headers, children, handleColumnResize, preventInteraction, ...meta} = props;
 
         const {from, to, focus} = state;
-        if (from>0) {
-            views.push(<div key='top-placeholder' style={{height: (from*ROW_HEIGHT) + 'px'}}/>);
-        }
         const {length} = rows;
         for (let i = max(from, 0); i < min(to, length); i++) {
             views.push(<GridRow
@@ -41,17 +40,14 @@ export default class GridTable extends React.Component {
                 headers={headers}
                 displayPlaceholder={preventInteraction}/>);
         }
-        if (to<length) {
-            views.push(<div key='bottom-placeholder' style={{height: ((length-to)*ROW_HEIGHT) + 'px'}}/>);
-        }
         const contentHeight = parseInt(meta.style.height.replace('px', '')) - SCROLL_BAR_HEIGHT;
         return (
             <div {...meta}>
                 <div className='grid-table-container' onMouseDown={e => !preventInteraction && e.stopPropagation()}>
                     <div
                         ref={setListRef}
-                        className={'grid-table-content' + (preventInteraction ? ' no-scroll' : '')}
-                        style={{height: contentHeight + 'px'}}>
+                        className={`grid-table-content${preventInteraction ? ' no-scroll' : ''}`}
+                        style={{height: `${contentHeight}px`}}>
                         <div
                             key={'header-' + scrollTop}
                             className='grid-table-header'
@@ -64,7 +60,9 @@ export default class GridTable extends React.Component {
                                     onResize={width => handleColumnResize({width, column})}/>
                             ))}
                         </div>
+                        <Margin key='top' height={from > 0 ? from * ROW_HEIGHT : 0}/>
                         {views}
+                        <Margin key='bottom' height={to < length ? (length-to) * ROW_HEIGHT : 0}/>
                         {children}
                     </div>
                 </div>
